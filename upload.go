@@ -59,8 +59,8 @@ type XMLMPU struct {
 type Option func(m *XMLMPU)
 
 const (
-	defaultChunkSize       = 5 * 1024 * 1024 // 5 MB
-	defaultRetry           = 3               // 建议默认3~5次，不要太大，否则将可能会导致成为僵尸任务。
+	DefaultChunkSize       = 20 * 1024 * 1024 // 5 MB
+	defaultRetry           = 3                // 建议默认3~5次，不要太大，否则将可能会导致成为僵尸任务。
 	defaultSignedURLExpiry = 15 * time.Minute
 
 	MinimumChunkSize = 5 * 1024 * 1024               // 5 MB
@@ -109,7 +109,7 @@ func NewXMLMPU(cli *storage.Client, bucket string, blob string, uploadFile strin
 			signedURLExpiry: defaultSignedURLExpiry,
 			log:             NewLogger(nil, false),
 		},
-		chunkSize: defaultChunkSize,
+		chunkSize: DefaultChunkSize,
 		workers:   runtime.NumCPU(),
 	}
 
