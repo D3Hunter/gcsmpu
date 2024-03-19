@@ -11,17 +11,15 @@ import (
 
 	"cloud.google.com/go/storage"
 	"github.com/docker/go-units"
-
-	"google.golang.org/api/option"
-
 	"github.com/liqiuqing/gcsmpu"
 	"github.com/sirupsen/logrus"
+	"google.golang.org/api/option"
 )
 
 // main函数是程序的入口点。
 // 它解析命令行参数并执行分块上传操作。
 func main() {
-	credFile := flag.String("c", "cred.json", "authorize using a JSON key file")     // -c 参数用于指定授权的 JSON 密钥文件
+	credFile := flag.String("c", "", "authorize using a JSON key file")              // -c 参数用于指定授权的 JSON 密钥文件
 	bucketName := flag.String("bucket", "polymeric_billing_temp", "bucket name")     // -bucket 参数用于指定存储桶名称
 	sourceFilename := flag.String("file", "notes.txt", "source file name")           // -file 参数用于指定源文件名
 	destinationBlobName := flag.String("blob", "notes.txt", "destination file name") // -blob 参数用于指定目标文件名
@@ -33,7 +31,15 @@ func main() {
 
 	ctx := context.Background()
 
-	cli, err := storage.NewClient(ctx, option.WithCredentialsFile(*credFile))
+	var (
+		cli *storage.Client
+		err error
+	)
+	if len(*credFile) == 0 {
+		cli, err = storage.NewClient(ctx)
+	} else {
+		cli, err = storage.NewClient(ctx, option.WithCredentialsFile(*credFile))
+	}
 	if err != nil {
 		panic(err)
 	}
