@@ -74,6 +74,6 @@ func main() {
 	fmt.Println(string(bs))
 
 	fmt.Fprintf(os.Stderr, "data-size: %s, part-size:%s, worker-count: %d, speed: %s/s\n",
-		units.BytesSize(float64(stat.Size())), *partSize, *workerCount,
+		units.BytesSize(float64(stat.Size())), units.BytesSize(float64(*partSize)), *workerCount,
 		units.BytesSize(float64(stat.Size())/time.Since(start).Seconds()))
 }
